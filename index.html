@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videoni ko'rish</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            z-index: 10;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .play-btn {
+            background-color: #e94560;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 15px solid white;
+        }
+
+        #video-container {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <h1>Videoni to'liq ekranda va ovoz bilan ko'rish uchun bosing</h1>
+        <button class="play-btn" id="playBtn">
+            <div class="play-icon"></div>
+            Boshlash
+        </button>
+    </div>
+
+    <div id="video-container">
+        <video id="myVideo" controls>
+            <source src="Kecha_va_Kunduz_51_boshlanish_birlashtirilgan.mp4" type="video/mp4">
+            Brauzeringiz videoni qo'llab-quvvatlamaydi.
+        </video>
+    </div>
+
+    <script>
+        const playBtn = document.getElementById('playBtn');
+        const startScreen = document.getElementById('start-screen');
+        const videoContainer = document.getElementById('video-container');
+        const video = document.getElementById('myVideo');
+
+        playBtn.addEventListener('click', () => {
+            // Hide start screen and show video
+            startScreen.style.display = 'none';
+            videoContainer.style.display = 'block';
+
+            // Set volume to max
+            video.volume = 1.0;
+
+            // Go full screen
+            if (videoContainer.requestFullscreen) {
+                videoContainer.requestFullscreen();
+            } else if (videoContainer.webkitRequestFullscreen) { /* Safari */
+                videoContainer.webkitRequestFullscreen();
+            } else if (videoContainer.msRequestFullscreen) { /* IE11 */
+                videoContainer.msRequestFullscreen();
+            }
+
+            // Play the video
+            video.play().catch(error => {
+                console.error("Video play failed:", error);
+            });
+        });
+
+        // Optional: when exiting fullscreen, pause the video or show the start screen again
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                // User exited full screen
+                video.pause();
+                startScreen.style.display = 'flex';
+                videoContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
